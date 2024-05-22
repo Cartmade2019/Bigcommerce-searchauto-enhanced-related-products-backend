@@ -2,7 +2,10 @@ const express = require('express');
 const app = express();
 const path = require('path');
 const XLSX = require('xlsx');
-const port = 7755;
+require('dotenv').config();
+const port = process.env.PORT || 3000;
+
+// const port = 7755;
 
 app.use('/static', express.static(path.join(__dirname, 'public')));
 
