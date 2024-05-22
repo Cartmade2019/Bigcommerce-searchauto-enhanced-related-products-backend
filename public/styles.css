@@ -1,52 +1,152 @@
-.tab {
-    display: flex;
-    flex-direction: row;
-    border-bottom: 1px solid #ccc;
+.sacra-custom-realted-product{
+    padding: 50px 15px;
 }
-
-.tab button {
-    background-color: #f1f1f1;
-    border: none;
-    outline: none;
+.sa-custom-related-product-container {
+    max-width: 1250px;
+    margin: 0 auto;
+    padding-bottom:50px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+.sacra-inner-container{
+    padding: 1.5rem 0 0.5rem;
+}
+.sacra-inner-container h2 {
+    color: #050505;
+    padding-bottom: 16px;
+    text-transform: capitalize;
+    font-size: 22px;
+    margin-bottom: 0;
+}
+.sacra-inner-container span{
+    font-size: 16px;
+    font-weight: 500;
+    text-transform: initial;
+    max-width: 550px;
+    text-align: left;
+    display: block;
+}
+.related-products-swiper-container{
+    overflow-x: hidden;
+}
+.sacra-tab.tab-wrapper .tablink {
+    margin-right: 2px;
+    padding: 8px 0px;
+    padding-bottom: 2px;
     cursor: pointer;
-    padding: 14px 16px;
-    transition: 0.3s;
+    font-size: 18px;
+    text-transform: capitalize;
+    margin-left: 12px;
+    margin-right: 12px;
 }
-
-.tab button:hover {
-    background-color: #ddd;
+.sacra-tab.tab-wrapper .tablink:nth-child(1){
+    margin-left: 0;
 }
-
-.tab button.active {
-    background-color: #ccc;
+.sacra-tab.tab-wrapper .tablink.active{
+    color: #050505;
+    font-weight: 400;
+    border-bottom: 1px #e08281 solid;
+    border-radius: 0;
 }
-
-.tabcontent {
-    display: none;
-    padding: 6px 12px;
-    border: 1px solid #ccc;
-    border-top: none;
+.related-products-swiper-wrapper {
+    padding-top: 18px;
 }
-
-.swiper-container {
+.sacra-section {
+    background-color: #fff2de;
+}
+.sacra-section .tab{
+    border-top: 0;
+}
+.product-card{
+    background: #fff 0% 0% no-repeat padding-box;
+    box-shadow: 0 2px 12px #2222221f;
+    border-radius: 4px;
+}
+.card-image-container img {
     width: 100%;
-    padding: 20px 0;
 }
-
-.swiper-slide {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.card-information-wrapper {
+    padding: 24px;
 }
-
-.product-card {
-    border: 1px solid #ccc;
-    padding: 16px;
-    margin: 16px;
+.card-group-container span.brand--name {
+    font-weight: 600;
+}
+.product--title-container a {
+    font-size: 16px;
+}
+.price--container .price-money {
+    color: #d24d55;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: normal;
+    margin-bottom: 0;
+}
+.card-group-container {
+    line-height: normal;
+    margin-bottom: 2px;
+}
+.product--title-container {
+    line-height: 25px;
+    font-weight: 400;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+a.button-link-to {
+    color: #3b97b6;
+    text-decoration: underline;
+    display: block;
     text-align: center;
+    font-size: 14px;
 }
-
-.product-card img {
-    max-width: 100%;
-    height: auto;
+/* .related-products-swiper-wrapper {
+    overflow: hidden;
+} */
+.tabcontent {
+    position: relative;
+}
+.related-products-swiper-button-prev.swiper-button-prev,.related-products-swiper-button-next.swiper-button-next {
+    height: 56px;
+    width: 56px;
+    padding: 15px;
+    transform: unset;
+    top: 50%;
+    z-index: 10;
+    cursor: pointer;
+    background: #e6e6e6;
+    border: 1px #e6e6e6 solid;
+    color: #000;
+    padding: 10px;
+}
+.related-products-swiper-button-next.swiper-button-next{
+    right: -84px;
+}
+.related-products-swiper-button-prev.swiper-button-prev{
+    left: -84px;
+}
+.related-products-swiper-button-prev.swiper-button-prev:after,.related-products-swiper-button-next.swiper-button-next:after{
+    font-size: 24px;
+}
+.sacra-tab.tab-wrapper {
+    line-height: normal;
+    margin-bottom: 10px;
+}
+@media(max-width:1400px){
+    .related-products-swiper-button-prev.swiper-button-prev,.related-products-swiper-button-next.swiper-button-next {
+        height: 40px;
+        width: 40px;
+    }
+    .related-products-swiper-button-next.swiper-button-next{
+        right: -32px;
+    }
+    .related-products-swiper-button-prev.swiper-button-prev{
+        left: -32px;
+    }
+}
+@media(max-width:1024px){
+    .related-products-swiper-button-next.swiper-button-next{
+        right: -10px;
+    }
+    .related-products-swiper-button-prev.swiper-button-prev{
+        left: -10px;
+    }
 }
