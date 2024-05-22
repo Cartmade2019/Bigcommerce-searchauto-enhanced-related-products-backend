@@ -171,7 +171,7 @@ function appendDiv(sku, variant_data) {
     // Function to create product cards
     function createProductCards(products) {
         return products.map(product => {
-            const imageUrl = product.defaultImage ? product.defaultImage.url : '';
+            const imageUrl = product.defaultImage ? product.defaultImage.url : 'http://localhost:7755/static/asset/ProductDefault.gif';
             return `
         <div class="related-products-swiper-slide swiper-slide">
           <div class="product-card">
