@@ -1,18 +1,19 @@
 // routes/storeRoutes.js
 const express = require('express');
 const router = express.Router();
+require('dotenv').config();
 const appController = require('../controllers/appControllers');
 
-router.get('/stores', appController.getStores);
+// router.get('/stores', appController.getStores);
 
 // Function to create the product cards and tabs
-function appendDiv(sku, variant_data) {
-    console.log("SKU:", sku, "Variant Data:", variant_data);
-    // Function to create product cards
-    function createProductCards(products) {
-        return products.map(product => {
-            const imageUrl = product.defaultImage ? product.defaultImage.url : 'http://localhost:7755/static/asset/coming-soon.webp';
-            return `
+function appendDiv(sku, variant_data, defaultImageUrl) {
+  console.log("SKU:", sku, "Variant Data:", variant_data);
+  // Function to create product cards
+  function createProductCards(products) {
+    return products.map(product => {
+      const imageUrl = product.defaultImage ? product.defaultImage.url : defaultImageUrl;
+      return `
         <div class="related-products-swiper-slide swiper-slide">
           <div class="product-card">
             <div class="card-image-container">
@@ -43,14 +44,14 @@ function appendDiv(sku, variant_data) {
           </div>
         </div>
       `;
-        }).join('');
-    }
+    }).join('');
+  }
 
-    // Function to create tabs and their respective product cards
-    function createTabs(data) {
-        const tabs = Object.keys(data).filter(key => data[key].length > 0);
-        const tabHeaders = tabs.map(tab => `<button class="tablink" onclick="openTab(event, '${tab}')">${tab}</button>`).join('');
-        const tabContents = tabs.map(tab => `
+  // Function to create tabs and their respective product cards
+  function createTabs(data) {
+    const tabs = Object.keys(data).filter(key => data[key].length > 0);
+    const tabHeaders = tabs.map(tab => `<button class="tablink" onclick="openTab(event, '${tab}')">${tab}</button>`).join('');
+    const tabContents = tabs.map(tab => `
       <div id="${tab}" class="tabcontent related-products--tab-content">
         <div class="related-products-swiper-container swiper-container">
           <div class="related-products-swiper-wrapper swiper-wrapper">
@@ -65,7 +66,7 @@ function appendDiv(sku, variant_data) {
       </div>
     `).join('');
 
-        return `
+    return `
         <section id="sacra-custom-realted-product" class="sacra-section">
         <div class="sa-custom-related-product-container sacra-page-width" >
             <div class="sacra-inner-wrapper">
@@ -84,101 +85,107 @@ function appendDiv(sku, variant_data) {
         </div>
       </section>
     `;
-    }
+  }
 
-    // Append the created tabs to the body
-    document.body.innerHTML += createTabs(variant_data);
+  // Append the created tabs to the body
+  document.body.innerHTML += createTabs(variant_data);
 
-    // Function to handle tab switching
-    function openTab(evt, tabName) {
-        const tabcontent = document.querySelectorAll(".tabcontent");
-        tabcontent.forEach(content => content.style.display = "none");
+  // Function to handle tab switching
+  function openTab(evt, tabName) {
+    const tabcontent = document.querySelectorAll(".tabcontent");
+    tabcontent.forEach(content => content.style.display = "none");
 
-        const tablinks = document.querySelectorAll(".tablink");
-        tablinks.forEach(link => link.classList.remove("active"));
+    const tablinks = document.querySelectorAll(".tablink");
+    tablinks.forEach(link => link.classList.remove("active"));
 
-        document.getElementById(tabName).style.display = "block";
-        evt.currentTarget.classList.add("active");
-    }
+    document.getElementById(tabName).style.display = "block";
+    evt.currentTarget.classList.add("active");
+  }
 
-    // Add the openTab function to the global scope
-    window.openTab = openTab;
+  // Add the openTab function to the global scope
+  window.openTab = openTab;
 
-    // Set default tab to open
-    document.addEventListener('DOMContentLoaded', () => {
-        document.querySelector('.tablink').click();
-    });
+  // Set default tab to open
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelector('.tablink').click();
+  });
 }
 
 router.get('/related-products/products', async (req, res) => {
-    const { sku, storefront_api } = req.query;
-    try {
-        const data = await appController.splitTheSKUs(sku, storefront_api);
-
-        res.setHeader('Content-Type', 'application/javascript');
-        res.setHeader('Cache-Control', 'public, max-age=86400');
-        res.send(`
-      (function() {
-        ${appendDiv.toString()}
-        appendDiv('${sku}', ${JSON.stringify(data)});
-
-        // Adding link to external CSS file
-        const link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.type = 'text/css';
-        link.href = 'http://localhost:7755/static/styles.css';
-        document.head.appendChild(link);
-        
-        // Adding link to Swiper CSS
-        const linkSwiperCss = document.createElement('link');
-        linkSwiperCss.rel = 'stylesheet';
-        linkSwiperCss.type = 'text/css';
-        linkSwiperCss.href = 'https://unpkg.com/swiper/swiper-bundle.min.css';
-        document.head.appendChild(linkSwiperCss);
-
-        // Adding Swiper JS script
-        const scriptSwiperJs = document.createElement('script');
-        scriptSwiperJs.src = 'https://unpkg.com/swiper/swiper-bundle.min.js';
-        scriptSwiperJs.onload = function() {
-            initializeRelatedProdSwiper();
-        };
-        document.head.appendChild(scriptSwiperJs);
-      })();
-
-      function initializeRelatedProdSwiper() {
-        const swiper = new Swiper('.related-products-swiper-container', {
-          slidesPerView: 4,
-          spaceBetween: 15,
-
-          navigation: {
-            nextEl: '.related-products-swiper-button-next',
-            prevEl: '.related-products-swiper-button-prev',
-          },
-          breakpoints: {
-            640: {
-              slidesPerView: 2,
-              spaceBetween: 15,
+  const { sku, storeId, storefront_api } = req.query;
+  try {
+    const data = await appController.splitTheSKUs(sku, storeId, storefront_api);
+    if (data) {
+      const defaultImageUrl = process.env.DEFAULTIMAGEURL || '';
+      const appStyleURL = process.env.APPSTYLESHEETURL || '';
+      res.setHeader('Content-Type', 'application/javascript');
+      res.setHeader('Cache-Control', 'public, max-age=86400');
+      res.send(`
+        (function() {
+          ${appendDiv.toString()}
+          appendDiv('${sku}', ${JSON.stringify(data)}, '${defaultImageUrl}');
+  
+          // Adding link to external CSS file
+          const link = document.createElement('link');
+          link.rel = 'stylesheet';
+          link.type = 'text/css';
+          link.href = '${appStyleURL}';
+          document.head.appendChild(link);
+          
+          // Adding link to Swiper CSS
+          const linkSwiperCss = document.createElement('link');
+          linkSwiperCss.rel = 'stylesheet';
+          linkSwiperCss.type = 'text/css';
+          linkSwiperCss.href = 'https://unpkg.com/swiper/swiper-bundle.min.css';
+          document.head.appendChild(linkSwiperCss);
+  
+          // Adding Swiper JS script
+          const scriptSwiperJs = document.createElement('script');
+          scriptSwiperJs.src = 'https://unpkg.com/swiper/swiper-bundle.min.js';
+          scriptSwiperJs.onload = function() {
+              initializeRelatedProdSwiper();
+          };
+          document.head.appendChild(scriptSwiperJs);
+        })();
+  
+        function initializeRelatedProdSwiper() {
+          const swiper = new Swiper('.related-products-swiper-container', {
+            slidesPerView: 4,
+            spaceBetween: 15,
+  
+            navigation: {
+              nextEl: '.related-products-swiper-button-next',
+              prevEl: '.related-products-swiper-button-prev',
             },
-            768: {
-              slidesPerView: 3,
-              spaceBetween: 15,
-            },
-            1024: {
-              slidesPerView: 3,
-              spaceBetween: 15,
-            },
-            1280: {
-                slidesPerView: 4,
+            breakpoints: {
+              640: {
+                slidesPerView: 2,
                 spaceBetween: 15,
+              },
+              768: {
+                slidesPerView: 3,
+                spaceBetween: 15,
+              },
+              1024: {
+                slidesPerView: 3,
+                spaceBetween: 15,
+              },
+              1280: {
+                  slidesPerView: 4,
+                  spaceBetween: 15,
+                }
               }
-            }
-        });
-      }
-    `);
-    } catch (error) {
-        console.error('Error:', error);
-        res.status(500).send('Internal Server Error');
+          });
+        }
+      `);
+    } else {
+      res.status(404).send('Data not found');
     }
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).send('Internal Server Error');
+  }
 });
+
 
 module.exports = router;
