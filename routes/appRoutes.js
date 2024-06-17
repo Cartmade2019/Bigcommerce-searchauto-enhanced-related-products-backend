@@ -113,6 +113,11 @@ function appendDiv(sku, variant_data, defaultImageUrl) {
 
 router.get('/related-products/products', async (req, res) => {
   const { sku, storeId, storefront_api } = req.query;
+  // If sku is empty, return without running any code
+  if (!sku) {
+    res.status(400).send('SKU is required');
+    return;
+  }
   try {
     const data = await appController.splitTheSKUs(sku, storeId, storefront_api);
     if (data) {
