@@ -88,7 +88,10 @@ function appendDiv(sku, variant_data, defaultImageUrl) {
   }
 
   // Append the created tabs to the body
-  document.body.innerHTML += createTabs(variant_data);
+  const appendElement = document.querySelector("main");
+  if (appendElement) {
+    appendElement.innerHTML += createTabs(variant_data);
+  }
 
   // Function to handle tab switching
   function openTab(evt, tabName) {

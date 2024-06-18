@@ -13,7 +13,7 @@ app.use('/static', express.static(path.join(__dirname, 'public')));
 app.use('/api', storeRoutes);
 
 app.get('/', (req, res) => {
-    res.send('Search auto related app backend API...');
+    res.send('Search auto related app backend API!');
 });
 
 
