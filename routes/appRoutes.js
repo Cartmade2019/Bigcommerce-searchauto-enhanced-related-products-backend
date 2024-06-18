@@ -7,7 +7,7 @@ const appController = require('../controllers/appControllers');
 // router.get('/stores', appController.getStores);
 
 // Function to create the product cards and tabs
-function appendDiv(sku, variant_data, defaultImageUrl) {
+function appendDiv(sku, variant_data, defaultImageUrl, storeData) {
   console.log("SKU:", sku, "Variant Data:", variant_data);
   // Function to create product cards
   function createProductCards(products) {
@@ -57,9 +57,6 @@ function appendDiv(sku, variant_data, defaultImageUrl) {
           <div class="related-products-swiper-wrapper swiper-wrapper">
             ${createProductCards(data[tab])}
           </div>
-          <!-- Add Pagination -->
-          <div class="related-products-swiper-pagination swiper-pagination"></div>
-          <!-- Add Navigation -->
         </div>
         <div class="related-products-swiper-button-next swiper-button-next"></div>
           <div class="related-products-swiper-button-prev swiper-button-prev"></div>
@@ -71,9 +68,8 @@ function appendDiv(sku, variant_data, defaultImageUrl) {
         <div class="sa-custom-related-product-container sacra-page-width" >
             <div class="sacra-inner-wrapper">
                 <div class="sacra-inner-container">
-                    <h2>Complete Your Build</h2>
-                    <span>Complete your build with these products designed to work with the product you added to your
-                        cart</span>
+                    <h2>${storeData?.heading ?? ''}</h2>
+                    <span>${storeData?.sub_heading ?? ''}</span>
                 </div>
                 </div>
                 <div class="related-products--wrapper">
@@ -122,8 +118,8 @@ router.get('/related-products/products', async (req, res) => {
     return;
   }
   try {
-    const data = await appController.splitTheSKUs(sku, storeId, storefront_api);
-    if (data) {
+    const {result, storeData} = await appController.splitTheSKUs(sku, storeId, storefront_api);
+    if (result) {
       const defaultImageUrl = process.env.DEFAULTIMAGEURL || '';
       const appStyleURL = process.env.APPSTYLESHEETURL || '';
       res.setHeader('Content-Type', 'application/javascript');
@@ -131,7 +127,7 @@ router.get('/related-products/products', async (req, res) => {
       res.send(`
         (function() {
           ${appendDiv.toString()}
-          appendDiv('${sku}', ${JSON.stringify(data)}, '${defaultImageUrl}');
+          appendDiv('${sku}', ${JSON.stringify(result)}, '${defaultImageUrl}', ${JSON.stringify(storeData)});
   
           // Adding link to external CSS file
           const link = document.createElement('link');

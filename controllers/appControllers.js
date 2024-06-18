@@ -168,8 +168,9 @@ const splitTheSKUs = async (sku, storeId, storefront_api) => {
             }
         }));
 
-        console.log("result here", result);
-        return result;
+        // console.log("result here", result);
+        return { result, storeData };
+        // return result;
     } catch (error) {
         console.error('Error in splitTheSKUs:', error);
         throw error;
