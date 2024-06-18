@@ -9,6 +9,8 @@ const port = process.env.PORT || 3000;
 const storeRoutes = require('./routes/appRoutes');
 
 app.use('/static', express.static(path.join(__dirname, 'public')));
+// Serve the uploads folder as a static directory
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // Middleware to use the routes
 app.use('/api', storeRoutes);
 
