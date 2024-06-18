@@ -49,7 +49,7 @@ const upload = multer({
 app.post('/files/upload', upload.single('file'), (req, res) => {
     try {
         const filePath = `/uploads/${req.file.filename}`;
-        const fileUrl = `${req.protocol}://${req.get('host')}${filePath}`;
+        const fileUrl = `https://${req.get('host')}${filePath}`;
         res.status(200).send({
             message: 'File uploaded successfully',
             fileUrl: fileUrl
