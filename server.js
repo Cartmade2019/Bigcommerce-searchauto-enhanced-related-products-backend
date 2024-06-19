@@ -1,3 +1,4 @@
+// Note before pushing the files to deployment server, get all teh uploads file and save it first
 const express = require('express');
 const app = express();
 const path = require('path');

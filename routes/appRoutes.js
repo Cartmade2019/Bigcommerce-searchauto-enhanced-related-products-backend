@@ -12,34 +12,44 @@ function appendDiv(sku, variant_data, defaultImageUrl, storeData) {
   // Function to create product cards
   function createProductCards(products) {
     return products.map(product => {
-      const imageUrl = product.defaultImage ? product.defaultImage.url : defaultImageUrl;
+      // Ensure product object exists and is not null
+      if (!product) return '';
+
+      const imageUrl = product?.defaultImage?.url ?? defaultImageUrl;
+      const brandName = product?.brand?.name ?? '';
+      const productPath = product?.path ?? '#';
+      const productName = product?.name ?? 'Product Title';
+      const currencyCode = product?.prices?.price?.currencyCode ?? '';
+      const priceValue = product?.prices?.price?.value ?? '0.00';
+
       return `
         <div class="related-products-swiper-slide swiper-slide">
           <div class="product-card">
             <div class="card-image-container">
-                <img src="${imageUrl}" alt="${product.name}" />
+              <img src="${imageUrl}" alt="${productName}" />
             </div>
             <div class="card-information-wrapper">
-                <div class="card-information-container">
-                    <div class="card-group-container">
-                        <span class="brand--name">${product?.brand?.name ?? ''}</span>
-                    </div>
-                    <div class="product--title-container">
-                            <a href="${product?.path}" tabindex="0">
-                            ${product?.name}
-                        </a>
-                    </div>
-                    <div class="price--container">
-                        <p class="price-money">${product?.prices?.price?.currencyCode ?? ''} ${product?.prices?.price?.value ?? ''}</p>
-                    </div>
-                </div>   
-                <div class="card-button-container">
-                    <!-- 
-                     <p>Status: ${product.availabilityV2.status}</p>
-                     <a href="${product.addToCartUrl}" target="_blank" class="button button-container">Add to Cart</a>\
-                    -->
-                    <a href="${product?.path}" class="button-link-to">View Details</a>
+              <div class="card-information-container">
+                ${brandName ? `
+                  <div class="card-group-container">
+                    <span class="brand--name">${brandName}</span>
+                  </div>` : ''
+        }
+                <div class="product--title-container">
+                  <a href="${productPath}" tabindex="0">
+                    ${productName}
+                  </a>
                 </div>
+                <div class="price--container">
+                  <p class="price-money">${currencyCode} ${priceValue}</p>
+                </div>
+              </div>   
+              <div class="card-button-container">
+                <!-- Uncomment below lines if Add to Cart functionality is needed -->
+                <!-- <p>Status: ${product?.availabilityV2?.status ?? 'Unavailable'}</p>
+                <a href="${product?.addToCartUrl ?? '#'}" target="_blank" class="button button-container">Add to Cart</a> -->
+                <a href="${productPath}" class="button-link-to">View Details</a>
+              </div>
             </div>
           </div>
         </div>
@@ -47,10 +57,18 @@ function appendDiv(sku, variant_data, defaultImageUrl, storeData) {
     }).join('');
   }
 
+
   // Function to create tabs and their respective product cards
-  function createTabs(data) {
+  function createTabs(data, storeData = {}) {
+    // Filter out tabs that have no data
     const tabs = Object.keys(data).filter(key => data[key].length > 0);
-    const tabHeaders = tabs.map(tab => `<button class="tablink" onclick="openTab(event, '${tab}')">${tab}</button>`).join('');
+
+    // Generate tab headers
+    const tabHeaders = tabs.map(tab => `
+      <button class="tablink" onclick="openTab(event, '${tab}')">${tab}</button>
+    `).join('');
+
+    // Generate tab contents
     const tabContents = tabs.map(tab => `
       <div id="${tab}" class="tabcontent related-products--tab-content">
         <div class="related-products-swiper-container swiper-container">
@@ -59,29 +77,34 @@ function appendDiv(sku, variant_data, defaultImageUrl, storeData) {
           </div>
         </div>
         <div class="related-products-swiper-button-next swiper-button-next"></div>
-          <div class="related-products-swiper-button-prev swiper-button-prev"></div>
+        <div class="related-products-swiper-button-prev swiper-button-prev"></div>
       </div>
     `).join('');
 
+    // Use optional chaining for storeData and provide fallback values
+    const heading = storeData?.heading ?? '';
+    const subHeading = storeData?.sub_heading ?? '';
+
     return `
-        <section id="sacra-custom-realted-product" class="sacra-section">
-        <div class="sa-custom-related-product-container sacra-page-width" >
-            <div class="sacra-inner-wrapper">
-                <div class="sacra-inner-container">
-                    <h2>${storeData?.heading ?? ''}</h2>
-                    <span>${storeData?.sub_heading ?? ''}</span>
-                </div>
-                </div>
-                <div class="related-products--wrapper">
-                <div class="sacra-tab tab-wrapper">
-                    ${tabHeaders}
-                </div>
-                ${tabContents}
+      <section id="sacra-custom-related-product" class="sacra-section">
+        <div class="sa-custom-related-product-container sacra-page-width">
+          <div class="sacra-inner-wrapper">
+            <div class="sacra-inner-container">
+              <h2>${heading}</h2>
+              <span>${subHeading}</span>
             </div>
+          </div>
+          <div class="related-products--wrapper">
+            <div class="sacra-tab tab-wrapper">
+              ${tabHeaders}
+            </div>
+            ${tabContents}
+          </div>
         </div>
       </section>
     `;
   }
+
 
   // Append the created tabs to the body
   const appendElement = document.querySelector("main");
@@ -118,7 +141,7 @@ router.get('/related-products/products', async (req, res) => {
     return;
   }
   try {
-    const {result, storeData} = await appController.splitTheSKUs(sku, storeId, storefront_api);
+    const { result, storeData } = await appController.splitTheSKUs(sku, storeId, storefront_api);
     if (result) {
       const defaultImageUrl = process.env.DEFAULTIMAGEURL || '';
       const appStyleURL = process.env.APPSTYLESHEETURL || '';
