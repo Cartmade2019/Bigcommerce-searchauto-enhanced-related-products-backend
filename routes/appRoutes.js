@@ -65,14 +65,17 @@ function appendDiv(sku, variant_data, defaultImageUrl, storeData) {
       Array.isArray(data[key]) && data[key].length > 0 && data[key].some(item => item !== null)
     );
 
-    // Generate tab headers
-    const tabHeaders = tabs.map(tab => `
+    // Check if there is more than one non-empty tab
+    const multipleTabs = tabs.length > 1;
+
+    // Generate tab headers only if there is more than one tab
+    const tabHeaders = multipleTabs ? tabs.map(tab => `
       <button class="tablink" onclick="openTab(event, '${tab}')">${tab}</button>
-    `).join('');
+    `).join('') : '';
 
     // Generate tab contents
     const tabContents = tabs.map(tab => `
-      <div id="${tab}" class="tabcontent related-products--tab-content">
+      <div id="${tab}" class="tabcontent related-products--tab-content" ${!multipleTabs ? 'style="display:block;"' : ''}>
         <div class="related-products-swiper-container swiper-container">
           <div class="related-products-swiper-wrapper swiper-wrapper">
             ${createProductCards(data[tab])}
@@ -97,15 +100,14 @@ function appendDiv(sku, variant_data, defaultImageUrl, storeData) {
             </div>
           </div>
           <div class="related-products--wrapper">
-            <div class="sacra-tab tab-wrapper">
-              ${tabHeaders}
-            </div>
+            ${multipleTabs ? `<div class="sacra-tab tab-wrapper">${tabHeaders}</div>` : ''}
             ${tabContents}
           </div>
         </div>
       </section>
     `;
   }
+
 
 
   // Append the created tabs to the body
