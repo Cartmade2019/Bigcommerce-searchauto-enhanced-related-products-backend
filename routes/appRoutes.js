@@ -59,7 +59,7 @@ function appendDiv(sku, variant_data, defaultImageUrl, storeData) {
 
 
   // Function to create tabs and their respective product cards
-  function createTabs(data, storeData = {}) {
+  function createTabs(data) {
     // Filter out tabs that have no data or contain only null values
     const tabs = Object.keys(data).filter(key =>
       Array.isArray(data[key]) && data[key].length > 0 && data[key].some(item => item !== null)
