@@ -22,15 +22,15 @@ function appendDiv(sku, variant_data, defaultImageUrl, storeData) {
             <div class="card-information-wrapper">
                 <div class="card-information-container">
                     <div class="card-group-container">
-                        <span class="brand--name">${product.brand.name}</span>
+                        <span class="brand--name">${product?.brand?.name ?? ''}</span>
                     </div>
                     <div class="product--title-container">
-                            <a href="${product.path}" tabindex="0">
-                            ${product.name}
+                            <a href="${product?.path}" tabindex="0">
+                            ${product?.name}
                         </a>
                     </div>
                     <div class="price--container">
-                        <p class="price-money">${product.prices.price.currencyCode} ${product.prices.price.value}</p>
+                        <p class="price-money">${product?.prices?.price?.currencyCode ?? ''} ${product?.prices?.price?.value ?? ''}</p>
                     </div>
                 </div>   
                 <div class="card-button-container">
@@ -38,7 +38,7 @@ function appendDiv(sku, variant_data, defaultImageUrl, storeData) {
                      <p>Status: ${product.availabilityV2.status}</p>
                      <a href="${product.addToCartUrl}" target="_blank" class="button button-container">Add to Cart</a>\
                     -->
-                    <a href="${product.path}" class="button-link-to">View Details</a>
+                    <a href="${product?.path}" class="button-link-to">View Details</a>
                 </div>
             </div>
           </div>
