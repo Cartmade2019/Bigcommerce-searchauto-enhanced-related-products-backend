@@ -69,20 +69,20 @@ function appendDiv(sku, variant_data, defaultImageUrl, storeData) {
     const multipleTabs = tabs.length > 1;
 
     // Generate tab headers only if there is more than one tab
-    const tabHeaders = multipleTabs ? tabs.map(tab => `
-      <button class="tablink" onclick="openTab(event, '${tab}')">${tab}</button>
+    const tabHeaders = multipleTabs ? tabs.map((tab, index) => `
+      <button class="tablink ${index === 0 ? 'active' : ''}" onclick="openTab(event, '${tab}')">${tab}</button>
     `).join('') : '';
 
     // Generate tab contents
-    const tabContents = tabs.map(tab => `
-      <div id="${tab}" class="tabcontent related-products--tab-content" ${!multipleTabs ? 'style="display:block;"' : ''}>
-        <div class="related-products-swiper-container swiper-container">
+    const tabContents = tabs.map((tab, index) => `
+      <div id="${tab}" class="tabcontent related-products--tab-content" style="${index === 0 ? 'display:block;' : 'display:none;'}">
+        <div class="related-products-swiper-container related-products-swiper-container-${index} swiper-container">
           <div class="related-products-swiper-wrapper swiper-wrapper">
             ${createProductCards(data[tab])}
           </div>
         </div>
-        <div class="related-products-swiper-button-next swiper-button-next"></div>
-        <div class="related-products-swiper-button-prev swiper-button-prev"></div>
+        <div class="related-products-swiper-button-next swiper-button-next swiper-button-next-${index}"></div>
+        <div class="related-products-swiper-button-prev swiper-button-prev swiper-button-prev-${index}"></div>
       </div>
     `).join('');
 
@@ -111,10 +111,14 @@ function appendDiv(sku, variant_data, defaultImageUrl, storeData) {
 
 
   // Append the created tabs to the body
-  const appendElement = document.querySelector("main");
+  const appendElement = document.querySelector("main") ||
+    document.querySelector(".body") ||
+    document.body;
+
   if (appendElement) {
     appendElement.innerHTML += createTabs(variant_data);
   }
+
 
   // Function to handle tab switching
   function openTab(evt, tabName) {
@@ -124,17 +128,61 @@ function appendDiv(sku, variant_data, defaultImageUrl, storeData) {
     const tablinks = document.querySelectorAll(".tablink");
     tablinks.forEach(link => link.classList.remove("active"));
 
-    document.getElementById(tabName).style.display = "block";
+    const selectedTab = document.getElementById(tabName);
+    selectedTab.style.display = "block";
     evt.currentTarget.classList.add("active");
+
+    // Initialize Swiper for the opened tab
+    const tabIndex = Array.from(tablinks).findIndex(link => link.classList.contains("active"));
+    initializeRelatedProdSwiper(tabIndex);
   }
 
   // Add the openTab function to the global scope
   window.openTab = openTab;
 
-  // Set default tab to open
-  document.addEventListener('DOMContentLoaded', () => {
-    document.querySelector('.tablink').click();
-  });
+  function initializeRelatedProdSwiper(index) {
+    // Destroy existing Swiper instance if it exists
+    if (window.relatedProdSwipers && window.relatedProdSwipers[index]) {
+      window.relatedProdSwipers[index].destroy(true, true);
+    }
+
+    // Initialize new Swiper instance
+    const swiper = new Swiper(`.related-products-swiper-container-${index}`, {
+      slidesPerView: 4,
+      spaceBetween: 15,
+      navigation: {
+        nextEl: `.swiper-button-next-${index}`,
+        prevEl: `.swiper-button-prev-${index}`,
+      },
+      breakpoints: {
+        640: {
+          slidesPerView: 2,
+          spaceBetween: 15,
+        },
+        768: {
+          slidesPerView: 3,
+          spaceBetween: 15,
+        },
+        1024: {
+          slidesPerView: 3,
+          spaceBetween: 15,
+        },
+        1280: {
+          slidesPerView: 4,
+          spaceBetween: 15,
+        }
+      }
+    });
+
+    // Store the Swiper instance
+    if (!window.relatedProdSwipers) {
+      window.relatedProdSwipers = {};
+    }
+    window.relatedProdSwipers[index] = swiper;
+  }
+
+  // initialize first tab
+  initializeRelatedProdSwiper(0)
 }
 
 router.get('/related-products/products', async (req, res) => {
@@ -153,9 +201,6 @@ router.get('/related-products/products', async (req, res) => {
       res.setHeader('Cache-Control', 'public, max-age=86400');
       res.send(`
         (function() {
-          ${appendDiv.toString()}
-          appendDiv('${sku}', ${JSON.stringify(result)}, '${defaultImageUrl}', ${JSON.stringify(storeData)});
-  
           // Adding link to external CSS file
           const link = document.createElement('link');
           link.rel = 'stylesheet';
@@ -173,41 +218,17 @@ router.get('/related-products/products', async (req, res) => {
           // Adding Swiper JS script
           const scriptSwiperJs = document.createElement('script');
           scriptSwiperJs.src = 'https://unpkg.com/swiper/swiper-bundle.min.js';
-          scriptSwiperJs.onload = function() {
-              initializeRelatedProdSwiper();
+           scriptSwiperJs.onload = function() {
+              ${appendDiv.toString()}
+              appendDiv('${sku}', ${JSON.stringify(result)}, '${defaultImageUrl}', ${JSON.stringify(storeData)});
           };
           document.head.appendChild(scriptSwiperJs);
+
+          
+  
         })();
   
-        function initializeRelatedProdSwiper() {
-          const swiper = new Swiper('.related-products-swiper-container', {
-            slidesPerView: 4,
-            spaceBetween: 15,
-  
-            navigation: {
-              nextEl: '.related-products-swiper-button-next',
-              prevEl: '.related-products-swiper-button-prev',
-            },
-            breakpoints: {
-              640: {
-                slidesPerView: 2,
-                spaceBetween: 15,
-              },
-              768: {
-                slidesPerView: 3,
-                spaceBetween: 15,
-              },
-              1024: {
-                slidesPerView: 3,
-                spaceBetween: 15,
-              },
-              1280: {
-                  slidesPerView: 4,
-                  spaceBetween: 15,
-                }
-              }
-          });
-        }
+        
       `);
     } else {
       res.status(404).send('Data not found');

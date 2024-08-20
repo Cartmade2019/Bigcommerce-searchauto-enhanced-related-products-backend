@@ -160,6 +160,18 @@ a.button-link-to {
     margin-bottom: 10px;
 }
 
+/* .related-products-swiper-button-next[aria-disabled="true"], .related-products-swiper-button-prev[aria-disabled="true"] {
+    display: none;
+} */
+
+#sacra-custom-related-product a:focus,
+#sacra-custom-related-product a[role="button"]:focus,
+#sacra-custom-related-product button:focus,
+#sacra-custom-related-product div[role="button"]:focus {
+    outline: unset !important;
+    box-shadow: unset;
+}
+
 @media(max-width:1400px) {
 
     .related-products-swiper-button-prev.swiper-button-prev,
