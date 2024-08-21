@@ -70,29 +70,30 @@
     border-top: 0;
 }
 
-.product-card {
+.sacra-section .product-card {
     background: #fff 0% 0% no-repeat padding-box;
     box-shadow: 0 2px 12px #2222221f;
     border-radius: 4px;
+    height: 100%;
 }
 
-.card-image-container img {
+.sacra-section .card-image-container img {
     width: 100%;
 }
 
-.card-information-wrapper {
+.sacra-section .card-information-wrapper {
     padding: 24px;
 }
 
-.card-group-container span.brand--name {
+.sacra-section .card-group-container span.brand--name {
     font-weight: 600;
 }
 
-.product--title-container a {
+.sacra-section .product--title-container a {
     font-size: 16px;
 }
 
-.price--container .price-money {
+.sacra-section .price--container .price-money {
     color: #d24d55;
     font-weight: 700;
     font-size: 24px;
@@ -100,19 +101,19 @@
     margin-bottom: 0;
 }
 
-.card-group-container {
+.sacra-section .card-group-container {
     line-height: normal;
     margin-bottom: 2px;
 }
 
-.product--title-container {
+.sacra-section .product--title-container {
     line-height: 25px;
     font-weight: 400;
     text-transform: uppercase;
     margin-bottom: 8px;
 }
 
-a.button-link-to {
+.sacra-section a.button-link-to {
     color: #3b97b6;
     text-decoration: underline;
     display: block;
@@ -123,12 +124,12 @@ a.button-link-to {
 /* .related-products-swiper-wrapper {
     overflow: hidden;
 } */
-.tabcontent {
+.sacra-section .tabcontent {
     position: relative;
 }
 
-.related-products-swiper-button-prev.swiper-button-prev,
-.related-products-swiper-button-next.swiper-button-next {
+.sacra-section .related-products-swiper-button-prev.swiper-button-prev,
+.sacra-section .related-products-swiper-button-next.swiper-button-next {
     height: 56px;
     width: 56px;
     padding: 15px;
@@ -142,16 +143,16 @@ a.button-link-to {
     padding: 10px;
 }
 
-.related-products-swiper-button-next.swiper-button-next {
+.sacra-section .related-products-swiper-button-next.swiper-button-next {
     right: -84px;
 }
 
-.related-products-swiper-button-prev.swiper-button-prev {
+.sacra-section .related-products-swiper-button-prev.swiper-button-prev {
     left: -84px;
 }
 
-.related-products-swiper-button-prev.swiper-button-prev:after,
-.related-products-swiper-button-next.swiper-button-next:after {
+.sacra-section .related-products-swiper-button-prev.swiper-button-prev:after,
+.sacra-section .related-products-swiper-button-next.swiper-button-next:after {
     font-size: 24px;
 }
 
@@ -174,27 +175,27 @@ a.button-link-to {
 
 @media(max-width:1400px) {
 
-    .related-products-swiper-button-prev.swiper-button-prev,
-    .related-products-swiper-button-next.swiper-button-next {
+    .sacra-section .related-products-swiper-button-prev.swiper-button-prev,
+    .sacra-section .related-products-swiper-button-next.swiper-button-next {
         height: 40px;
         width: 40px;
     }
 
-    .related-products-swiper-button-next.swiper-button-next {
+    .sacra-section .related-products-swiper-button-next.swiper-button-next {
         right: -32px;
     }
 
-    .related-products-swiper-button-prev.swiper-button-prev {
+    .sacra-section .related-products-swiper-button-prev.swiper-button-prev {
         left: -32px;
     }
 }
 
 @media(max-width:1024px) {
-    .related-products-swiper-button-next.swiper-button-next {
+    .sacra-section .related-products-swiper-button-next.swiper-button-next {
         right: -10px;
     }
 
-    .related-products-swiper-button-prev.swiper-button-prev {
+    .sacra-section .related-products-swiper-button-prev.swiper-button-prev {
         left: -10px;
     }
 }
