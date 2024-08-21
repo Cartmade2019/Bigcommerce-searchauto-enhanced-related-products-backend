@@ -150,7 +150,7 @@ function appendDiv(sku, variant_data, defaultImageUrl, storeData) {
 
     // Initialize new Swiper instance
     const swiper = new Swiper(`.related-products-swiper-container-${index}`, {
-      slidesPerView: 2,
+      slidesPerView: 1,
       spaceBetween: 0,
       navigation: {
         nextEl: `.swiper-button-next-${index}`,
