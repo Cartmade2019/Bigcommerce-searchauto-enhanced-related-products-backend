@@ -135,6 +135,10 @@
 /* .related-products-swiper-wrapper {
     overflow: hidden;
 } */
+
+.sacra-section .swiper-wrapper {
+    height: unset !important;
+}
 .sacra-section .tabcontent {
     position: relative;
 }
