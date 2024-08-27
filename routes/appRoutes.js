@@ -67,12 +67,25 @@ function appendDiv(sku, variant_data, defaultImageUrl, storeData) {
       Array.isArray(data[key]) && data[key].length > 0 && data[key].some(item => item !== null)
     );
 
+    // Return an empty string if there are no valid tabs
+    if (tabs.length === 0) {
+      return '';
+    }
+
+    // Function to format tab headers
+    const formatHeader = (header) => {
+      return header
+        .split('_') // Split by underscore
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize each word
+        .join(' '); // Join the words with a space
+    };
+
     // Check if there is more than one non-empty tab
     const multipleTabs = tabs.length > 1;
 
     // Generate tab headers only if there is more than one tab
     const tabHeaders = multipleTabs ? tabs.map((tab, index) => `
-      <button class="tablink ${index === 0 ? 'active' : ''}" onclick="openTab(event, '${tab}')">${tab}</button>
+      <button class="tablink ${index === 0 ? 'active' : ''}" onclick="openTab(event, '${tab}')">${formatHeader(tab)}</button>
     `).join('') : '';
 
     // Generate tab contents
@@ -109,6 +122,7 @@ function appendDiv(sku, variant_data, defaultImageUrl, storeData) {
       </section>
     `;
   }
+
 
 
 
