@@ -187,7 +187,18 @@
     outline: unset !important;
     box-shadow: unset;
 }
-
+#sacra-custom-related-product .sacra-button {
+    width: 100%;
+    background-color: transparent;
+    border: 1px #333 solid;
+    color: #333;
+    padding: 10px;
+}
+#sacra-custom-related-product .sacra-button:hover{
+    background-color: var(--primary);
+    border-color: var(--primary);
+    color: #fff;
+}
 
 @media(max-width:1400px) {
 

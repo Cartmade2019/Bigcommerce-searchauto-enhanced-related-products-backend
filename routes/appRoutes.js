@@ -46,11 +46,15 @@ function appendDiv(sku, variant_data, defaultImageUrl, storeData) {
                       <p class="price-money">${currencyCode} ${priceValue}</p>
                     </div>
                   <div class="card-button-container">
-                    <!-- Uncomment below lines if Add to Cart functionality is needed -->
-                    <p>Status: ${product?.availabilityV2?.status ?? 'Unavailable'}</p>
-                    <div class="card-button-wrapper">
-                      <a href="${product?.addToCartUrl ?? '#'}" class="button button-sa-outline">Add to Cart</a>   
-                    </div>
+                    <!-- Uncomment below lines if Add to Cart functionality is needed 
+                    <p>Status: ${product?.availabilityV2?.status ?? 'Unavailable'}</p> -->
+                      <div class="card-button-wrapper">
+                        <a href="${product?.availabilityV2?.status ? product?.addToCartUrl : '#'}" 
+                          class="sacra-button button-sa-outline ${!product?.availabilityV2?.status ? 'disabled' : ''}" 
+                          ${!product?.availabilityV2?.status ? 'disabled' : ''}>
+                          Add to Cart
+                        </a>   
+                      </div>
                      <!-- <a href="${productPath}" class="button-link-to">View Details</a> -->
                   </div>
                 </div>
