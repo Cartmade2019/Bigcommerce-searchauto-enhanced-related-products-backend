@@ -105,7 +105,7 @@ function appendDiv(sku, variant_data, defaultImageUrl, storeData) {
     const heading = storeData?.heading ?? '';
     const subHeading = storeData?.sub_heading ?? '';
 
-    return `
+    const tabContainers = `
       <section id="sacra-custom-related-product" class="sacra-section">
         <div class="sa-custom-related-product-container sacra-page-width">
           <div class="sacra-inner-wrapper">
@@ -121,6 +121,12 @@ function appendDiv(sku, variant_data, defaultImageUrl, storeData) {
         </div>
       </section>
     `;
+
+
+    const GlobalDiv = document.createElement('div');
+    GlobalDiv.className = 'sacra-tabs-global---container';
+    GlobalDiv.innerHTML = tabContainers;
+    return GlobalDiv;
   }
 
 
