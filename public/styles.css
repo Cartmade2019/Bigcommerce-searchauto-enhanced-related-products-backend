@@ -193,13 +193,21 @@
     border: 1px #333 solid;
     color: #333;
     padding: 10px;
+    display: block;
+    text-align: center;
+    border-radius: 4px;
+    margin-top: 15px;
 }
 #sacra-custom-related-product .sacra-button:hover{
-    background-color: var(--primary);
-    border-color: var(--primary);
+    background-color: #4dac8b;
+    border-color: #4dac8b;
     color: #fff;
 }
-
+.sacra-tab.tab-wrapper {
+    display: flex;
+    overflow-x: auto;
+    white-space: nowrap;
+}
 @media(max-width:1400px) {
 
     .sacra-section .related-products-swiper-button-prev.swiper-button-prev,
