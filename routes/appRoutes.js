@@ -126,13 +126,19 @@ function appendDiv(sku, variant_data, defaultImageUrl, storeData) {
 
 
 
-  // Append the created tabs to the body
+  // Append the created tabs to the PDP
   const appendElement = document.querySelector("main") ||
     document.querySelector(".body") ||
     document.body;
 
-  if (appendElement) {
-    appendElement.innerHTML += createTabs(variant_data);
+  const haloElement = document.querySelector(".halo-productView-top");
+
+  if (haloElement) {
+    // If the element with class "halo-productView-top" exists, append tabs next to it
+    haloElement.insertAdjacentElement('afterend', createTabs(variant_data));
+  } else if (appendElement) {
+    // Otherwise, append tabs to the selected appendElement
+    appendElement.appendChild(createTabs(variant_data));
   }
 
 
