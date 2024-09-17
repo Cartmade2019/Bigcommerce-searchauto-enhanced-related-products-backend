@@ -582,7 +582,6 @@ function saerpAppendPopupDiv(sku, variantData, defaultImageUrl, storeData) {
   function detectDevice() {
     const userAgent = navigator.userAgent.toLowerCase();
     const width = window.innerWidth;
-
     if (/mobile/i.test(userAgent) || width <= 767) {
       return false;
     } else if (/tablet|ipad|playbook|silk/i.test(userAgent) || (width > 767 && width <= 1024)) {
@@ -661,14 +660,16 @@ function saerpAppendPopupDiv(sku, variantData, defaultImageUrl, storeData) {
     // const saerpMainContainer = document.getElementById('product-container-bundle');
     const isDesktop = detectDevice();
     let saerpMainContainer;
-    if (isDesktop == false) {
+
+    if (!isDesktop) {
       saerpMainContainer = document.getElementById('halo-cart-sidebar');
     } else {
-      saerpMainContainer = document.querySelector('body');
+      saerpMainContainer = document.querySelector('main') || document.querySelector('body');
     }
-    
+
     if (saerpMainContainer) {
       const saerpPopupMainContainer = document.querySelector('.saerp-content-container');
+
       if (saerpPopupMainContainer) {
         saerpPopupMainContainer.remove();
       }
@@ -676,7 +677,6 @@ function saerpAppendPopupDiv(sku, variantData, defaultImageUrl, storeData) {
     } else {
       console.error('SAERP: Main container not found');
     }
-
 
     // Initialize all functions
     initializeCTAfunctionsManager()
