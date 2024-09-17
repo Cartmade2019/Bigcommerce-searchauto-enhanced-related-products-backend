@@ -238,30 +238,30 @@ function saerpAppendPopupDiv(sku, variantData, defaultImageUrl, storeData) {
   const heading = storeData?.heading ?? '';
   const subHeading = storeData?.sub_heading ?? '';
 
-  const saerpPopup = document.getElementById('product-popup');
-  const saerpCloseBtn = document.querySelector('.popup-close');
-  const saerpShowPopupBtn = document.getElementById('show-popup-btn');
+  // const saerpPopup = document.getElementById('product-popup');
+  // const saerpCloseBtn = document.querySelector('.popup-close');
+  // const saerpShowPopupBtn = document.getElementById('show-popup-btn');
 
-  // Function to show the popup
-  const saerpShowPopup = () => {
-    saerpPopup.style.display = 'block';
-  };
+  // // Function to show the popup
+  // const saerpShowPopup = () => {
+  //   saerpPopup.style.display = 'block';
+  // };
 
-  // Function to close the popup
-  const saerpClosePopup = () => {
-    saerpPopup.style.display = 'none';
-  };
+  // // Function to close the popup
+  // const saerpClosePopup = () => {
+  //   saerpPopup.style.display = 'none';
+  // };
 
-  // Event listeners for opening and closing the popup
-  saerpShowPopupBtn.addEventListener('click', saerpShowPopup);
-  saerpCloseBtn.addEventListener('click', saerpClosePopup);
+  // // Event listeners for opening and closing the popup
+  // saerpShowPopupBtn.addEventListener('click', saerpShowPopup);
+  // saerpCloseBtn.addEventListener('click', saerpClosePopup);
 
   // Close popup when clicking outside the content area
-  window.addEventListener('click', (e) => {
-    if (e.target === saerpPopup) {
-      saerpClosePopup();
-    }
-  });
+  // window.addEventListener('click', (e) => {
+  //   if (e.target === saerpPopup) {
+  //     saerpClosePopup();
+  //   }
+  // });
 
   // Function to check if array has any valid data
   const saerpHasValidData = (arr) => arr && Array.isArray(arr) && arr.some(item => item !== null && item !== undefined);
@@ -578,6 +578,20 @@ function saerpAppendPopupDiv(sku, variantData, defaultImageUrl, storeData) {
     setupAddAllButton();
   };
 
+  // Function to detect device type and log message
+  function detectDevice() {
+    const userAgent = navigator.userAgent.toLowerCase();
+    const width = window.innerWidth;
+
+    if (/mobile/i.test(userAgent) || width <= 767) {
+      return false;
+    } else if (/tablet|ipad|playbook|silk/i.test(userAgent) || (width > 767 && width <= 1024)) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   // Main function to analyze data and create the product display
   const saerpProcessData = (data) => {
     if (!data || typeof data !== 'object') {
@@ -645,7 +659,14 @@ function saerpAppendPopupDiv(sku, variantData, defaultImageUrl, storeData) {
 
     // Clear the main container and append the new content
     // const saerpMainContainer = document.getElementById('product-container-bundle');
-    const saerpMainContainer = document.getElementById('halo-cart-sidebar');
+    const isDesktop = detectDevice();
+    let saerpMainContainer;
+    if (isDesktop == false) {
+      saerpMainContainer = document.getElementById('halo-cart-sidebar');
+    } else {
+      saerpMainContainer = document.querySelector('body');
+    }
+    
     if (saerpMainContainer) {
       const saerpPopupMainContainer = document.querySelector('.saerp-content-container');
       if (saerpPopupMainContainer) {
