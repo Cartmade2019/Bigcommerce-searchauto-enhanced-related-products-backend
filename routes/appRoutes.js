@@ -247,21 +247,11 @@ function saerpAppendPopupDiv(sku, variantData, defaultImageUrl, storeData) {
   //   saerpPopup.style.display = 'block';
   // };
 
-  // // Function to close the popup
-  // const saerpClosePopup = () => {
-  //   saerpPopup.style.display = 'none';
-  // };
-
   // // Event listeners for opening and closing the popup
   // saerpShowPopupBtn.addEventListener('click', saerpShowPopup);
   // saerpCloseBtn.addEventListener('click', saerpClosePopup);
 
-  // Close popup when clicking outside the content area
-  // window.addEventListener('click', (e) => {
-  //   if (e.target === saerpPopup) {
-  //     saerpClosePopup();
-  //   }
-  // });
+
 
   // Function to check if array has any valid data
   const saerpHasValidData = (arr) => arr && Array.isArray(arr) && arr.some(item => item !== null && item !== undefined);
@@ -421,7 +411,8 @@ function saerpAppendPopupDiv(sku, variantData, defaultImageUrl, storeData) {
   // Attach event listeners for quantity increment/decrement
   const setupQuantityControls = () => {
     document.querySelectorAll('.saerp-qty-inc, .saerp-qty-dec').forEach(button => {
-      button.addEventListener('click', function () {
+      button.addEventListener('click', function (event) {
+        event.preventDefault();
         const input = this.closest('.saerp-quantity-wrapper').querySelector('.saerp-form-input-increment');
         const action = this.getAttribute('data-action');
 
@@ -444,6 +435,7 @@ function saerpAppendPopupDiv(sku, variantData, defaultImageUrl, storeData) {
     if (buttons.length > 0) {
       buttons.forEach(button => {
         button.addEventListener('click', async function (event) {
+          event.preventDefault();
           const productId = this.getAttribute('data-id');
           const quantityInput = this.closest('.saerp-product-item-button-container').querySelector('.saerp-form-input-increment');
           const quantity = parseInt(quantityInput.value, 10);
@@ -476,7 +468,8 @@ function saerpAppendPopupDiv(sku, variantData, defaultImageUrl, storeData) {
   };
 
   // Function to add all products to the cart
-  const addAllProductsToCart = async () => {
+  const addAllProductsToCart = async (event) => {
+    event.preventDefault()
     const buttons = document.querySelectorAll('.saerp-add-to-cart-btn');
     const lineItems = [];
 
@@ -527,7 +520,9 @@ function saerpAppendPopupDiv(sku, variantData, defaultImageUrl, storeData) {
   const setupAddAllButton = () => {
     const addAllButton = document.getElementById('saerp-add-all-to-cart-btn');
     if (addAllButton) {
-      addAllButton.addEventListener('click', addAllProductsToCart);
+      addAllButton.addEventListener('click', async (event) => {
+        await addAllProductsToCart(event);
+      });
     }
   };
 
@@ -570,12 +565,41 @@ function saerpAppendPopupDiv(sku, variantData, defaultImageUrl, storeData) {
   };
   // Add to cart button functionlity - hide the button adn append ours
 
+  const setupDomPrevention = () => {
+    const saerpContainer = document.querySelector('.saerp-content-container');
+    if (saerpContainer) {
+      saerpContainer.addEventListener('click', function (event) {
+        const target = event.target;
+        if (
+          target.classList.contains('saerp-quantity-wrapper') ||
+          target.classList.contains('saerp-product-item-atc-button') ||
+          target.tagName === 'BUTTON' ||
+          target.tagName === 'INPUT'
+        ) {
+          // Allow the default behavior for these elements
+          console.log('Button, input, or allowed element clicked');
+        } else {
+          event.stopPropagation();
+          event.preventDefault();
+        }
+      });
+
+      // Close popup when clicking outside the content area
+      // window.addEventListener('click', (e) => {
+      //   if (e.target === saerpContainer) {
+      //     saerpContainer.style.display = 'none';
+      //   }
+      // });
+    }
+  }
+
   // initiaze all CTA buttons
   const initializeCTAfunctionsManager = () => {
     // Initialze button function
     setupQuantityControls();
     setupAddToCartButtons();
     setupAddAllButton();
+    setupDomPrevention();
   };
 
   // Function to detect device type and log message
@@ -590,6 +614,8 @@ function saerpAppendPopupDiv(sku, variantData, defaultImageUrl, storeData) {
       return true;
     }
   }
+
+
 
   // Main function to analyze data and create the product display
   const saerpProcessData = (data) => {
