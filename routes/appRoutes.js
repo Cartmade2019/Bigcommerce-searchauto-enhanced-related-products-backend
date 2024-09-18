@@ -571,9 +571,15 @@ function saerpAppendPopupDiv(sku, variantData, defaultImageUrl, storeData) {
     // Add event listener to custom button
     customButton.addEventListener('click', (event) => {
       event.preventDefault();
+      event.stopPropagation();
+      customButton.disabled = true;
+      customButton.innerHTML = 'Adding to Cart…';
       saerpProcessData(productData);
       // Trigger the hidden submit button
       submitButton.click();
+
+      customButton.disabled = false;
+      customButton.innerHTML = 'Add to Cart';
     });
 
   };
