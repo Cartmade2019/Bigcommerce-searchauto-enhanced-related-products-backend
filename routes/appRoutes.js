@@ -310,12 +310,16 @@ function saerpAppendPopupDiv(sku, variantData, defaultImageUrl, storeData) {
 
   // Function to generate the "Add All to Cart" button
   const saerpCreateAddAllButton = (cartUrls) => {
+    const buttonContainer = document.createElement('div');
+    buttonContainer.classList.add('saerp-add-all-to-cart-btn-container');
     const button = document.createElement('button');
-    button.classList.add('saerp-add-all-to-cart-btn');
+    // button.classList.add('saerp-add-all-to-cart-btn button button-primary');
+    button.classList.add('saerp-add-all-to-cart-btn', 'button', 'button-primary');
     button.id = 'saerp-add-all-to-cart-btn';
     // button.dataset.urls = cartUrls.join(',');
     button.textContent = 'Add All to Cart';
-    return button;
+    buttonContainer.appendChild(button);
+    return buttonContainer;
   };
 
   // /Button functions start
@@ -413,6 +417,7 @@ function saerpAppendPopupDiv(sku, variantData, defaultImageUrl, storeData) {
     document.querySelectorAll('.saerp-qty-inc, .saerp-qty-dec').forEach(button => {
       button.addEventListener('click', function (event) {
         event.preventDefault();
+        event.stopPropagation();
         const input = this.closest('.saerp-quantity-wrapper').querySelector('.saerp-form-input-increment');
         const action = this.getAttribute('data-action');
 
@@ -436,6 +441,7 @@ function saerpAppendPopupDiv(sku, variantData, defaultImageUrl, storeData) {
       buttons.forEach(button => {
         button.addEventListener('click', async function (event) {
           event.preventDefault();
+          event.stopPropagation();
           const productId = this.getAttribute('data-id');
           const quantityInput = this.closest('.saerp-product-item-button-container').querySelector('.saerp-form-input-increment');
           const quantity = parseInt(quantityInput.value, 10);
@@ -469,7 +475,8 @@ function saerpAppendPopupDiv(sku, variantData, defaultImageUrl, storeData) {
 
   // Function to add all products to the cart
   const addAllProductsToCart = async (event) => {
-    event.preventDefault()
+    event.preventDefault();
+    event.stopPropagation();
     const buttons = document.querySelectorAll('.saerp-add-to-cart-btn');
     const lineItems = [];
 
@@ -521,6 +528,8 @@ function saerpAppendPopupDiv(sku, variantData, defaultImageUrl, storeData) {
     const addAllButton = document.getElementById('saerp-add-all-to-cart-btn');
     if (addAllButton) {
       addAllButton.addEventListener('click', async (event) => {
+        event.preventDefault();
+        event.stopPropagation();
         await addAllProductsToCart(event);
       });
     }
