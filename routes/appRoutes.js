@@ -580,8 +580,7 @@ function saerpAppendPopupDiv(sku, variantData, defaultImageUrl, storeData) {
       saerpContainer.addEventListener('click', function (event) {
         const target = event.target;
         if (
-          target.classList.contains('saerp-quantity-wrapper') ||
-          target.classList.contains('saerp-product-item-atc-button') ||
+          target.classList.contains('saerp-button-icon') ||
           target.tagName === 'BUTTON' ||
           target.tagName === 'INPUT'
         ) {
