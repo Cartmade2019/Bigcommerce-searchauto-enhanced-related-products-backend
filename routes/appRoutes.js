@@ -551,17 +551,22 @@ function saerpAppendPopupDiv(sku, variantData, defaultImageUrl, storeData) {
       console.error('Submit button not found');
       return;
     }
-    // Get all classes of the submit button
-    const buttonClasses = Array.from(submitButton.classList);
+
+    // Get all classes of the submit button except "has_related_product" and "disable-data"
+    const buttonClasses = Array.from(submitButton.classList).filter(cls => cls !== 'has_related_product' && cls !== 'disabled');
+
     // Hide the original submit button
     submitButton.style.display = 'none';
+
     // Create a custom button element
     const customButton = document.createElement('button');
     customButton.id = 'Saerp-form-action-addToCart';
     customButton.textContent = 'Add to Cart'; // Customize the button text as needed
     customButton.classList.add(...buttonClasses);
+
     // Append the custom button in the same position
     submitButton.parentNode.insertBefore(customButton, submitButton.nextSibling);
+
 
     // Add event listener to custom button
     customButton.addEventListener('click', (event) => {
