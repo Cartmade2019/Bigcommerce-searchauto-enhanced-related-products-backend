@@ -269,7 +269,7 @@ function saerpAppendPopupDiv(sku, variantData, defaultImageUrl, storeData) {
             <div class="saerp-product-item-img-container">
               <img class="saerp-product-image" src="${imageUrl}" alt="${item.name}">
               <div class="saerp-product-sku">SKU: ${item.sku}</div>
-              <div class="saerp-product-price">Price: ${item.prices.price.value || 'NaN'}</div>
+              <div class="saerp-product-price">Price: $${item.prices.price.value || 'NaN'}</div>
             </div>
             <div class="saerp-product-item-button-container">
               <div class="saerp-quantity-wrapper saerp-form-increment">
