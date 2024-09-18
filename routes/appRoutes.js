@@ -238,21 +238,6 @@ function saerpAppendPopupDiv(sku, variantData, defaultImageUrl, storeData) {
   const heading = storeData?.heading ?? '';
   const subHeading = storeData?.sub_heading ?? '';
 
-  // const saerpPopup = document.getElementById('product-popup');
-  // const saerpCloseBtn = document.querySelector('.popup-close');
-  // const saerpShowPopupBtn = document.getElementById('show-popup-btn');
-
-  // // Function to show the popup
-  // const saerpShowPopup = () => {
-  //   saerpPopup.style.display = 'block';
-  // };
-
-  // // Event listeners for opening and closing the popup
-  // saerpShowPopupBtn.addEventListener('click', saerpShowPopup);
-  // saerpCloseBtn.addEventListener('click', saerpClosePopup);
-
-
-
   // Function to check if array has any valid data
   const saerpHasValidData = (arr) => arr && Array.isArray(arr) && arr.some(item => item !== null && item !== undefined);
 
@@ -269,7 +254,7 @@ function saerpAppendPopupDiv(sku, variantData, defaultImageUrl, storeData) {
             <div class="saerp-product-item-img-container">
               <img class="saerp-product-image" src="${imageUrl}" alt="${item.name}">
               <div class="saerp-product-sku">SKU: ${item.sku}</div>
-              <div class="saerp-product-price">Price: $${item.prices.price.value || 'NaN'}</div>
+              <div class="saerp-product-price">Price: ${item?.prices?.price?.currencyCode || '$'} ${item.prices.price.value || 'NaN'}</div>
             </div>
             <div class="saerp-product-item-button-container">
               <div class="saerp-quantity-wrapper saerp-form-increment">
@@ -561,7 +546,7 @@ function saerpAppendPopupDiv(sku, variantData, defaultImageUrl, storeData) {
     // Create a custom button element
     const customButton = document.createElement('button');
     customButton.id = 'Saerp-form-action-addToCart';
-    customButton.textContent = 'Add to Cart'; // Customize the button text as needed
+    customButton.textContent = 'Add to Cart';
     customButton.classList.add(...buttonClasses);
 
     // Append the custom button in the same position
