@@ -581,6 +581,7 @@ function saerpAppendPopupDiv(sku, variantData, defaultImageUrl, storeData) {
         const target = event.target;
         if (
           target.classList.contains('saerp-button-icon') ||
+          target.classList.contains('saerp-form-input-increment') ||
           target.tagName === 'BUTTON' ||
           target.tagName === 'INPUT'
         ) {
