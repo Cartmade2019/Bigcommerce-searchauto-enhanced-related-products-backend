@@ -49,7 +49,7 @@ function appendDiv(sku, variant_data, defaultImageUrl, storeData) {
                     <!-- Uncomment below lines if Add to Cart functionality is needed 
                     <p>Status: ${product?.availabilityV2?.status ?? 'Unavailable'}</p> -->
                       <div class="card-button-wrapper">
-                        <a href="${product?.availabilityV2?.status ? product?.addToCartUrl : '#'}" 
+                        <a rel="nofollow" href="${product?.availabilityV2?.status ? product?.addToCartUrl : '#'}" 
                           class="sacra-button button-sa-outline ${!product?.availabilityV2?.status ? 'disabled' : ''}" 
                           ${!product?.availabilityV2?.status ? 'disabled' : ''}>
                           Add to Cart
@@ -113,7 +113,7 @@ function appendDiv(sku, variant_data, defaultImageUrl, storeData) {
 
     const tabContainers = `
       <section id="sacra-custom-related-product" class="sacra-section">
-        <div class="sa-custom-related-product-container sacra-page-width">
+        <div class="sa-custom-related-product-container sacra-page-width container">
           <div class="sacra-inner-wrapper">
             <div class="sacra-inner-container">
               <h2>${heading}</h2>
@@ -298,7 +298,6 @@ function saerpAppendPopupDiv(sku, variantData, defaultImageUrl, storeData) {
     const buttonContainer = document.createElement('div');
     buttonContainer.classList.add('saerp-add-all-to-cart-btn-container');
     const button = document.createElement('button');
-    // button.classList.add('saerp-add-all-to-cart-btn button button-primary');
     button.classList.add('saerp-add-all-to-cart-btn', 'button', 'button-primary');
     button.id = 'saerp-add-all-to-cart-btn';
     // button.dataset.urls = cartUrls.join(',');
@@ -355,7 +354,7 @@ function saerpAppendPopupDiv(sku, variantData, defaultImageUrl, storeData) {
       // Show loading state on button
       if (buttonElement) {
         buttonElement.disabled = true;
-        buttonElement.innerHTML = 'Loading...'; // Update button text to show loading
+        buttonElement.innerHTML = '...'; // Update button text to show loading
       }
 
       const cartData = await fetchCart('/api/storefront/carts');
@@ -588,13 +587,6 @@ function saerpAppendPopupDiv(sku, variantData, defaultImageUrl, storeData) {
           event.preventDefault();
         }
       });
-
-      // Close popup when clicking outside the content area
-      // window.addEventListener('click', (e) => {
-      //   if (e.target === saerpContainer) {
-      //     saerpContainer.style.display = 'none';
-      //   }
-      // });
     }
   }
 
